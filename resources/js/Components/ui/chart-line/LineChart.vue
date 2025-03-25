@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="T extends Record<string, any>">
 import type { BaseChartProps } from '.'
-import { ChartCrosshair, ChartLegend, defaultColors } from '@/components/ui/chart'
+import { ChartCrosshair, ChartLegend, defaultColors } from '@/Components/ui/chart'
 import { cn } from '@/lib/utils'
 import { type BulletLegendItemInterface, CurveType } from '@unovis/ts'
 import { Axis, Line } from '@unovis/ts'
