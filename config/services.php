@@ -35,4 +35,15 @@ return [
         ],
     ],
 
+    'stock_api' => [
+        'token' => env('STOCK_API_TOKEN'),
+    ],
+
+    'polygon_api' => [
+        'token' => env('POLYGON_API_TOKEN'),
+    ],
+    'financialmodelingprep_api' => [
+        'token' => env('FINANCIALMODELINGPREP_API_TOKEN'),
+    ],
+
 ];
