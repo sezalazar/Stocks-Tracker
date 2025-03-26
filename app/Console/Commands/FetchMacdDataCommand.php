@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 class FetchMacdDataCommand extends Command
 {
     protected $signature = 'macd:fetch';
-    protected $description = 'Fetch MACD data for multiple tickers';
+    protected $description = 'Fetch MACD data for multiple tickers and store it in the database.';
 
     protected array $tickers;
     protected array $timespans = ['day'];
@@ -25,20 +25,13 @@ class FetchMacdDataCommand extends Command
         foreach ($this->tickers as $ticker) {
             Log::info("Fetching MACD data for ticker: {$ticker}");
             $this->info("Fetching MACD data for ticker: {$ticker}");
-    
+
             foreach ($this->timespans as $timespan) {
-                $data = $this->polygonService->fetchMacdData($ticker, $timespan);
-    
-                if (!empty($data['results']['values'])) {
-                    Log::info("New MACD data stored for ticker: {$ticker}, timespan: {$timespan}");
-                } else {
-                    Log::info("No new MACD data to store for ticker: {$ticker}, timespan: {$timespan}");
-                }
-    
-                sleep(20);
+                $this->polygonService->fetchMacdDataRecursive($ticker, $timespan);
+                sleep(22);
             }
         }
-    
+
         $this->info('MACD data fetched and stored successfully.');
         return Command::SUCCESS;
     }
