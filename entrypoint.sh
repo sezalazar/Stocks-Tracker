@@ -54,6 +54,4 @@ fi
 
 chmod -R 755 public/storage
 
-chown -R www-data:www-data /var/www/html
-
 exec php-fpm

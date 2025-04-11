@@ -30,16 +30,14 @@ class FetchStockPricesCommand extends Command
             $dtoMethod = 'fromStockAnalysis';
             $data = $this->stockAnalysisService->fetchStockPricesFromStockAnalysisApi($ticker);
 
-            if (empty($data)) {
-
-            }
-
             if (!empty($data)) {
                 $dtos = array_map(fn($item) => StockDataDTO::$dtoMethod($item), $data);
                 $this->stockDataService->storeStockPricesData($ticker, $dtos);
                 $this->info("Data stored from StockAnalysis API for: {$ticker}");
                 Log::info("Historical data stored from StockAnalysis API for: {$ticker}");
-            } else {
+            }
+
+            if (empty($data)) {
                 $dtoMethod = 'fromStockDataOrg';
                 $data = $this->stockDataService->fetchStockPricesFromStockDataApi($ticker);
                 if (!empty($data)) {
@@ -53,8 +51,8 @@ class FetchStockPricesCommand extends Command
                 }
             }
 
-            $this->info("Sleeping 30 seconds...");
-            sleep(30);
+            $this->info("Sleeping 21 seconds...");
+            sleep(21);
         }
 
         $this->info('Stock prices data fetching completed.');
