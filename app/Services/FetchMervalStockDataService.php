@@ -15,7 +15,6 @@ class FetchMervalStockDataService
         $to      = Carbon::now()->format('Y-m-d') . 'T00:00:00.000Z';
 
         $url = sprintf(
-            '%s/series/securities/bm_MERV_%s_24hs?resolution=D&from=%s&to=%s&_ds=%s',
             rtrim($baseUrl, '/'),
             $ticker,
             $from,
