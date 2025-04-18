@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Services\RsiService;
+use App\Services\StockServices\Indicators\RsiService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\StockServices\Indicators;
 
 use App\Repositories\RsiRepository;
 use Carbon\Carbon;

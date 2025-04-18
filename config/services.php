@@ -45,5 +45,12 @@ return [
     'financialmodelingprep_api' => [
         'token' => env('FINANCIALMODELINGPREP_API_TOKEN'),
     ],
-
+    'fear_and_greed_api' => [
+        'host' => env('FEAR_AND_GREED_API_HOST'),
+        'key' => env('FEAR_AND_GREED_API_KEY'),
+    ],
+    'merval_api' => [
+        'base_url' => env('MATRIZ_BASE_URL'),
+        'cookie'   => env('MATRIZ_COOKIE'),
+    ],
 ];

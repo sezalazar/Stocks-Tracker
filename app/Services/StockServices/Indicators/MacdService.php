@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\StockServices\Indicators;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
@@ -8,39 +8,20 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\MacdRepository;
 
-class PolygonService
+class MacdService
 {
     protected $apiKey;
-    protected $companyDataUrl;
     protected $rsiDataUrl;
     protected $macdDataUrl;
 
     public function __construct(private MacdRepository $macdRepository)
     {
         $this->apiKey = config('services.polygon_api.token');
-        $this->companyDataUrl = 'https://api.polygon.io/v3/reference/tickers/';
         $this->rsiDataUrl = 'https://api.polygon.io/v1/indicators/rsi/';
         $this->macdDataUrl = 'https://api.polygon.io/v1/indicators/macd/';
     }
-
-    public function getCompanyBasicData(string $symbol): array
-    {
-        try {
-            $response = Http::get($this->companyDataUrl . $symbol, [
-                'apiKey' => $this->apiKey,
-            ]);
-
-            if ($response->successful()) {
-                return $response->json();
-            }
-        } catch (\Exception $e) {
-            Log::error("{$symbol}: " . $e->getMessage());
-        }
-
-        return [];
-    }
     
-    public function fetchMacdDataRecursive(string $symbol, string $timespan = 'day'): void
+    public function fetchMacdDataRecursiveAndStore(string $symbol, string $timespan = 'day'): void
     {
         $lastSaved = $this->getLastSavedMacdTimestamp($symbol, $timespan);
         $dateString = $lastSaved?->toDateString() ?? '2000-01-01';

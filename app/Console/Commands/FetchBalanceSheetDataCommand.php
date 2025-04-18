@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Services\FinancialModelingPrepService;
+use App\Services\StockServices\Finantials\FinancialModelingPrepService;
 use App\Repositories\FinancialStatementsRepository;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;

@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'merv' => [
+        'COME',
+        'PAMP',
+        'YPFD'
+    ],
     'list' => [
         'AAPL',
         'ABEV',
@@ -102,7 +107,8 @@ return [
         'SUPV',
         'TEO',
         'TGS',
-        'TGT', 
+        'TGT',
+        'TSLA',
         'TSM',
         'UNH',
         'VALE', 

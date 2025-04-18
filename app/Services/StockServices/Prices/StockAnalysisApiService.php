@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\StockServices\Prices;
 
 use App\Repositories\StockPricesRepository;
 use Illuminate\Support\Facades\Http;

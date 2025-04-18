@@ -4,7 +4,8 @@ import DashboardTabs from '@/Components/DashboardTabs.vue'
 
 const props = defineProps<{
   cryptoList: any[],
-  stocksList: any[]
+  stocksList: any[],
+  marketData: { fearAndGreed: any | null },
 }>()
 </script>
 
@@ -15,6 +16,7 @@ const props = defineProps<{
         <DashboardTabs
           :crypto-list="cryptoList"
           :stocks-list="stocksList"
+          :market-data="props.marketData"
         />
       </div>
     </div>

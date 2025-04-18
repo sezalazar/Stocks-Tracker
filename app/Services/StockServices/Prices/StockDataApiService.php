@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\StockServices\Prices;
 
 use App\Repositories\StockPricesRepository;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
 
 class StockDataApiService
 {
@@ -20,7 +19,7 @@ class StockDataApiService
         $this->baseUrl = 'https://api.stockdata.org/v1/data/eod';
     }
 
-    public function fetchStockPricesFromStockDataApi(string $symbol): ?array
+    public function fetchStockPricesFromStockDataApi(string $symbol)
     {
         try {
             $response = Http::get($this->baseUrl, [
@@ -34,7 +33,7 @@ class StockDataApiService
 
         } catch (\Exception $e) {
             Log::error(" {$symbol}: " . $e->getMessage());
-            return null;
+            return [];
         }
     }
 

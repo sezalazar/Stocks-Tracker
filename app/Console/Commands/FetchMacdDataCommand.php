@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Services\PolygonService;
+use App\Services\StockServices\Indicators\MacdService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
@@ -14,7 +14,7 @@ class FetchMacdDataCommand extends Command
     protected array $tickers;
     protected array $timespans = ['day'];
 
-    public function __construct(private PolygonService $polygonService)
+    public function __construct(private MacdService $macdService)
     {
         parent::__construct();
         $this->tickers = config('tickers.list');
@@ -27,8 +27,8 @@ class FetchMacdDataCommand extends Command
             $this->info("Fetching MACD data for ticker: {$ticker}");
 
             foreach ($this->timespans as $timespan) {
-                $this->polygonService->fetchMacdDataRecursive($ticker, $timespan);
-                sleep(22);
+                $this->macdService->fetchMacdDataRecursiveAndStore($ticker, $timespan);
+                sleep(15);
             }
         }
 

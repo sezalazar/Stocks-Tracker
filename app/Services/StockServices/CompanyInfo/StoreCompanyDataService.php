@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\StockServices\CompanyInfo;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
-class CompanyDataService
+class StoreCompanyDataService
 {
     public function storeCompanyData(array $data): void
     {

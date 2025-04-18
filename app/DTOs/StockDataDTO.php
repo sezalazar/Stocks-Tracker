@@ -52,6 +52,18 @@ class StockDataDTO
         );
     }
 
+    public static function fromMerv(array $item): self
+    {
+        return new self(
+            substr($item['d'], 0, 10),
+            $item['o'],
+            $item['h'],
+            $item['l'],
+            $item['c'],
+            (int) $item['v']
+        );
+    }
+
     public static function fromDatabase(array $item): self
     {
         return new self(

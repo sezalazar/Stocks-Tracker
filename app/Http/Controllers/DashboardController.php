@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\MacdRepository;
-use App\Repositories\FinancialStatementsRepository;
-use App\Services\RsiService;
-use App\Services\StockAnalysisApiService;
+use App\Services\MarketServices\FearGreedIndexService;
+use App\Services\StockServices\Indicators\RsiService;
+use App\Services\StockServices\Prices\StockAnalysisApiService;
 use App\Services\StockDataTransformerService;
 use Inertia\Inertia;
 
@@ -16,6 +16,7 @@ class DashboardController extends Controller
         private MacdRepository $macdRepository,
         private StockAnalysisApiService $stockAnalysisService,
         private StockDataTransformerService $stockDataTransformer,
+        private FearGreedIndexService $fearGreedIndexService,
     ) {}
 
     public function index()
@@ -55,9 +56,14 @@ class DashboardController extends Controller
             ];
         }
 
+        $marketData = [
+            'fearAndGreed' => $this->fearGreedIndexService->fetch(),
+        ];
+
         return Inertia::render('Dashboard', [
             'cryptoList' => $cryptoList,
             'stocksList' => $stocksList,
+            'marketData' => $marketData,
         ]);
     }
 
