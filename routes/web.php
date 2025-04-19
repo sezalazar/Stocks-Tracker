@@ -29,7 +29,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/stocks', [StockController::class, 'index'])->name('stocks.index');
 
     //Options
-    Route::get('/options', [OptionsController::class, 'showForm'])->name('options.form');
     Route::post('/options/process', [OptionsController::class, 'processMarketData'])->name('options.process');
 });
 

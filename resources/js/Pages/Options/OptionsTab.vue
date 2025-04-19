@@ -164,6 +164,11 @@ const form = useForm({
 
 const { groupedOptionsByExpiration } = useOptions();
 
+// Reactive props
+const underlying = computed(() => page.props.underlying);
+const options = computed(() => page.props.options || []);
+const strategies = computed(() => page.props.strategies || []);
+
 const formatCurrency = (value) => {
   if (value == null) return '-';
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
@@ -173,6 +178,7 @@ const submitForm = () => {
   form.post(route('options.process'), {
     preserveState: true,
     preserveScroll: true,
+    only: ['underlying', 'options', 'strategies'],
     onSuccess: () => {},
     onError: (errors) => {
       console.error("Errores:", errors);
