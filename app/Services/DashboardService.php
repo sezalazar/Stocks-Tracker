@@ -11,7 +11,7 @@ class DashboardService
 
     public function getDashboardData(): array 
     {
-        $tickers = config('tickers.list');
+        $tickers = config('tickers.spy');
 
         $rsiCollection = $this->repo->getLatestRsiForTickers($tickers);
 

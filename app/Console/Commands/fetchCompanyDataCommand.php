@@ -21,7 +21,7 @@ class FetchCompanyDataCommand extends Command
 
     public function handle()
     {
-        $tickers = config('tickers.list');
+        $tickers = config('tickers.spy');
 
         foreach ($tickers as $ticker) {
             Log::info("Fetching Company Data for ticker: {$ticker}");

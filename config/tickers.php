@@ -6,7 +6,7 @@ return [
         'PAMP',
         'YPFD'
     ],
-    'list' => [
+    'spy' => [
         'AAPL',
         'ABEV',
         'ACHR',

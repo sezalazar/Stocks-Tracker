@@ -17,7 +17,7 @@ class FetchMacdDataCommand extends Command
     public function __construct(private MacdService $macdService)
     {
         parent::__construct();
-        $this->tickers = config('tickers.list');
+        $this->tickers = config('tickers.spy');
     }
 
     public function handle()

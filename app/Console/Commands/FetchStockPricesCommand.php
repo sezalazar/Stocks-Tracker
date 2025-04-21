@@ -49,7 +49,7 @@ class FetchStockPricesCommand extends Command
         }
 
         // Nasdaq Nyse Tickers
-        $nasdaqTickers = config('tickers.list');
+        $nasdaqTickers = config('tickers.spy');
         $this->info('Processing Nasdaq tickers...');
 
         foreach ($nasdaqTickers as $ticker) {

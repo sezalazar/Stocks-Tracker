@@ -19,7 +19,7 @@ class FetchRsiDataCommand extends Command
     )
     {
         parent::__construct();
-        $this->tickers = config('tickers.list');
+        $this->tickers = config('tickers.spy');
     }
 
     public function handle()

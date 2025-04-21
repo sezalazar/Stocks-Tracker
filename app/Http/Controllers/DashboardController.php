@@ -23,7 +23,7 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $tickers = config('tickers.list');
+        $tickers = config('tickers.spy');
         $cryptos = config('tickers.criptoList');
         $rsiData = $this->rsiService->getLatestRsiForTickers($tickers);
         $macdData = $this->macdRepository->getLatestMacdForTickers($tickers);

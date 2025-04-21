@@ -1,0 +1,27 @@
+-- Stand up app
+	docker-compose up -d
+    npm run dev
+    http://localhost:8000/login
+
+-- Rebuild Docker Containers:
+	docker-compose up -d --build
+    
+
+-- Stop Docker Containers
+docker-compose down
+	docker-compose down
+
+
+-- Execute commands:
+docker-compose exec laravel-vue-stocks bash
+	php artisan balanceSheet:fetch
+	php artisan companyData:fetch
+	php artisan macd:fetch
+	php artisan rsi:fetch
+	php artisan stockprices:fetch
+
+    php artisan migrate
+    php artisan migrate:rollback --path=database/migrations/2024_12_11_175526_create_financial_statements_table.php
+
+-- Logs:
+	docker-compose logs laravel-vue-stocks
