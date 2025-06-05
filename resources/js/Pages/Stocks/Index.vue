@@ -174,7 +174,7 @@ const selectedTab = ref<TabKey>('chart')
 <template>
     <Head title="Stocks" />
     <AuthenticatedLayout>
-        <div class="p-6 space-y-8 bg-gray-100 min-h-screen">
+        <div class="p-6 space-y-8 min-h-screen">
             <!-- Header: Company Information -->
             <div class="p-6 space-y-8 bg-linear-to-r from-blue-50 via-white to-gray-100 rounded-xl shadow-lg">
                 <div class="flex flex-col md:flex-row items-center justify-between gap-6">

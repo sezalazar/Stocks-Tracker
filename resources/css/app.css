@@ -1,121 +1,361 @@
 @import url('https://rsms.me/inter/inter.css') layer(base);
-
 @import 'tailwindcss';
-
 @config '../../tailwind.config.js';
-
-/*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
-@layer base {
-
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
-  }
-}
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 20 14.3% 4.1%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 20 14.3% 4.1%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 20 14.3% 4.1%;
-
-    --primary: 24.6 95% 53.1%;
-    --primary-foreground: 60 9.1% 97.8%;
-
-    --secondary: 60 4.8% 95.9%;
-    --secondary-foreground: 24 9.8% 10%;
-
-    --muted: 60 4.8% 95.9%;
-    --muted-foreground: 25 5.3% 44.7%;
-
-    --accent: 60 4.8% 95.9%;
-    --accent-foreground: 24 9.8% 10%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 60 9.1% 97.8%;
-
-    --border: 20 5.9% 90%;
-    --input: 20 5.9% 90%;
-    --ring: 24.6 95% 53.1%;
-    --radius: 0.5rem;
-
-    --vis-tooltip-background-color: none !important;
-    --vis-tooltip-border-color: none !important;
-    --vis-tooltip-text-color: none !important;
-    --vis-tooltip-shadow-color: none !important;
-    --vis-tooltip-backdrop-filter: none !important;
-    --vis-tooltip-padding: none !important;
-
-    --vis-primary-color: var(--primary);
-    /* change to any hsl value you want */
-    --vis-secondary-color: 160 81% 40%;
-    --vis-text-color: var(--muted-foreground);
-  }
-
-  .dark {
-    --background: 20 14.3% 4.1%;
-    --foreground: 60 9.1% 97.8%;
-
-    --card: 20 14.3% 4.1%;
-    --card-foreground: 60 9.1% 97.8%;
-
-    --popover: 20 14.3% 4.1%;
-    --popover-foreground: 60 9.1% 97.8%;
-
-    --primary: 20.5 90.2% 48.2%;
-    --primary-foreground: 60 9.1% 97.8%;
-
-    --secondary: 12 6.5% 15.1%;
-    --secondary-foreground: 60 9.1% 97.8%;
-
-    --muted: 12 6.5% 15.1%;
-    --muted-foreground: 24 5.4% 63.9%;
-
-    --accent: 12 6.5% 15.1%;
-    --accent-foreground: 60 9.1% 97.8%;
-
+    --background: 0 0% 14%;
+    --foreground: 210 17% 97%;
+    --card: 180 9.8% 23.1%;
+    --card-foreground: 210 17% 97%;
+    --popover: 0 0% 14%;
+    --popover-foreground: 210 17% 97%;
+    --primary: 44.9 97.1% 56.3%;
+    --primary-foreground: 0 0% 14%;
+    --secondary: 180 9.8% 23.1%;
+    --secondary-foreground: 210 17% 97%;
+    --muted: 180 9.8% 23.1%;
+    --muted-foreground: 210 17% 80%;
+    --accent: 180 9.8% 23.1%;
+    --accent-foreground: 210 17% 97%;
     --destructive: 0 72.2% 50.6%;
     --destructive-foreground: 60 9.1% 97.8%;
-
-    --border: 12 6.5% 15.1%;
-    --input: 12 6.5% 15.1%;
-    --ring: 20.5 90.2% 48.2%;
-
+    --border: 220 9% 30%;
+    --input: 180 9.8% 23.1%;
+    --ring: 44.9 97.1% 56.3%;
+    --brand-gray: 0 0% 14%;
+    --brand-gray-light: 180 9.8% 23.1%;
+    --brand-yellow: 44.9 97.1% 56.3%;
     --vis-tooltip-background-color: none !important;
     --vis-tooltip-border-color: none !important;
     --vis-tooltip-text-color: none !important;
     --vis-tooltip-shadow-color: none !important;
     --vis-tooltip-backdrop-filter: none !important;
     --vis-tooltip-padding: none !important;
-
     --vis-primary-color: var(--primary);
-    /* change to any hsl value you want */
     --vis-secondary-color: 160 81% 40%;
     --vis-text-color: var(--muted-foreground);
+    --nav-background: 215 28% 17%;
+    --nav-border: 215 14% 28%;
+    --text-nav-emphasis: var(--foreground);
+    --text-nav-default: 210 17% 93%;
+    --text-nav-muted: 210 14% 84%;
+    --text-nav-subtle: 215 9% 65%;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--brand-gray-light);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--brand-yellow);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(42.7, 91.8%, 48.6%);
+  }
+}
+
+@layer components {
+  .app-nav {
+    @apply border-b bg-[hsl(var(--nav-background))] border-[hsl(var(--nav-border))] text-[hsl(var(--text-nav-emphasis))];
+  }
+
+  .app-nav-logo {
+    @apply text-[hsl(var(--text-nav-default))];
+  }
+
+  .app-nav-link {
+    @apply text-sm font-semibold hover:underline text-[hsl(var(--text-nav-default))];
+  }
+
+  .app-nav-icon-button {
+    @apply text-[hsl(var(--text-nav-subtle))] hover:text-[hsl(var(--text-nav-default))] focus:outline-none;
+  }
+
+  .app-nav-hamburger {
+    @apply text-[hsl(var(--text-nav-subtle))] hover:bg-[hsl(var(--nav-border))] hover:text-[hsl(var(--text-nav-default))] focus:outline-none;
+  }
+
+  .app-nav-dropdown-trigger {
+    @apply bg-[hsl(var(--nav-background))] border-transparent text-[hsl(var(--text-nav-muted))] hover:text-[hsl(var(--text-nav-emphasis))];
+  }
+
+  .app-responsive-nav-section {
+    @apply border-b border-[hsl(var(--nav-border))];
+  }
+
+  .app-responsive-nav-user-section {
+    @apply border-t border-[hsl(var(--nav-border))];
+  }
+
+  .app-responsive-nav-link {
+    @apply text-[hsl(var(--text-nav-muted))] hover:bg-[hsl(var(--nav-border))] hover:text-[hsl(var(--text-nav-emphasis))];
+  }
+
+  .app-responsive-nav-user-name {
+    @apply text-base font-medium text-[hsl(var(--text-nav-default))];
+  }
+
+  .app-responsive-nav-user-email {
+    @apply text-sm font-medium text-[hsl(var(--text-nav-subtle))];
+  }
+
+  .app-responsive-nav-action-link {
+    @apply text-[hsl(var(--text-nav-muted))] hover:text-[hsl(var(--text-nav-emphasis))] hover:underline;
+  }
+
+  .asset-tab-active-indicator[data-state='active']::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-full h-[3px] bg-[hsl(var(--primary))];
+    animation: slideIn 0.3s ease-out;
+  }
+
+  #market-overview ul li {
+    padding-bottom: 0.60rem;
+    border-bottom: 1px solid #e5e7eb;
+    /* gray-200, para contenido en bg-white */
+  }
+
+  #market-overview ul li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  #market-overview ul li:nth-last-child(2) {
+    border-bottom: none;
+    padding-bottom: 0.25rem;
+  }
+
+  .loading-bar {
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--brand-yellow), #3b82f6, #10b981, var(--brand-yellow));
+    background-size: 200% 100%;
+    animation: loading 2s linear infinite;
+  }
+
+  .insight-content {
+    display: none;
+  }
+
+  .insight-content.active {
+    display: block;
+  }
+
+  .insight-tab-button.active {
+    color: var(--brand-yellow);
+    font-weight: 600;
+    border-bottom: 2px solid var(--brand-yellow);
+  }
+
+  .stock-row:hover {
+    background-color: #fef9c3;
+  }
+
+  th.sortable {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  th.sortable:hover {
+    color: var(--brand-yellow);
+  }
+
+  .tab-content {
+    display: none;
+  }
+
+  .tab-content.active {
+    display: block;
+  }
+
+  .tab-button {
+    transition: all 0.3s ease;
+  }
+
+  .tab-button.active {
+    background-color: var(--primary);
+    color: var(--brand-gray);
+    font-weight: 600;
+  }
+
+  .asset-tab-button {
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .asset-tab-button.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--brand-yellow);
+    animation: slideIn 0.3s ease-out;
+  }
+
+  .indicator-value {
+    font-weight: 600;
+  }
+
+  .rsi-value {
+    color: #3b82f6;
+  }
+
+  .macd-value {
+    color: #10b981;
+  }
+
+  .ma-value {
+    color: #f59e0b;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 1024px) {
+  .right-panel {
+    width: 300px;
+  }
+
+  .asset-tab-button {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .asset-tab-button i {
+    margin-right: 0.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .flex-container {
+    flex-direction: column;
+  }
+
+  .right-panel {
+    width: 100%;
+    height: auto;
+    border-left: none;
+    border-top: 1px solid #374151;
+  }
+
+  .asset-tabs-container {
+    overflow-x: auto;
+    white-space: nowrap;
+    display: flex;
+    padding-bottom: 0.5rem;
+  }
+
+  .asset-tab-button {
+    flex: 0 0 auto;
+    min-width: 80px;
+  }
+
+  .search-container {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  #search-input,
+  #sector-select {
+    width: 100%;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .stock-row td {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .stock-row td svg {
+    width: 24px;
+    height: 6px;
+  }
+}
+
+@media (max-width: 640px) {
+  .header-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .time-refresh-container {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .tab-button {
+    padding: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .tab-button i {
+    margin-right: 0.25rem;
+  }
+
+  .market-overview-item {
+    font-size: 0.875rem;
+  }
+
+  .sector-period-tabs {
+    flex-wrap: wrap;
+  }
+
+  .sector-period-tabs button {
+    flex: 1 0 45%;
+    margin-bottom: 0.5rem;
   }
 }

@@ -8,15 +8,16 @@ use Inertia\Inertia;
 
 class OptionsController extends Controller
 {
-    public function __construct(private MarketDataService $marketDataService)
-    {
-    }
+    public function __construct(
+        private MarketDataService $marketDataService,
+    ){}
 
     public function processMarketData(Request $request)
     {
         $request->validate([
             'market_data' => 'required|string',
         ]);
+
 
         $results = $this->marketDataService->process($request->input('market_data'));
         return Inertia::render('Dashboard', [

@@ -8,6 +8,7 @@ use App\Services\FetchMervalStockDataService;
 use App\DTOs\StockDataDTO;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class FetchStockPricesCommand extends Command
 {
@@ -24,6 +25,7 @@ class FetchStockPricesCommand extends Command
 
     public function handle()
     {
+        Cache::forget('matriz_session_cookies');
         // Merval Tickers
         $mervalTickers = config('tickers.merv');
         $this->info('Processing Merval Tickers...');
@@ -44,8 +46,8 @@ class FetchStockPricesCommand extends Command
                 $this->error("No data found for: {$ticker}");
                 Log::error("No data found for: {$ticker}");
             }
-            $this->info("Sleeping 3 seconds...");
-            sleep(3);
+            $this->info("Sleeping 1 seconds...");
+            sleep(1);
         }
 
         // Nasdaq Nyse Tickers
@@ -78,8 +80,8 @@ class FetchStockPricesCommand extends Command
                 }
             }
             
-            $this->info("Sleeping 2 seconds...");
-            sleep(2);
+            $this->info("Sleeping 1 seconds...");
+            sleep(1);
         }
 
         $this->info('Stock prices data fetching completed.');

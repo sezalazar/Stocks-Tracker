@@ -49,8 +49,14 @@ return [
         'host' => env('FEAR_AND_GREED_API_HOST'),
         'key' => env('FEAR_AND_GREED_API_KEY'),
     ],
+    'matriz_api' => [
+        'base_url'  => env('MATRIZ_API_BASE_URL', 'https://matriz.eco.xoms.com.ar'),
+        'username'  => env('MATRIZ_API_USERNAME'),
+        'password'  => env('MATRIZ_API_PASSWORD'),
+    ],
     'merval_api' => [
         'base_url' => env('MATRIZ_BASE_URL'),
         'cookie'   => env('MATRIZ_COOKIE'),
+        ''
     ],
 ];

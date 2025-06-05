@@ -30,8 +30,8 @@ class FetchRsiDataCommand extends Command
 
             foreach ($this->timespans as $timespan) {
                 $this->rsiService->fetchRsiDataRecursive($ticker, $timespan);
-                sleep(60);
             }
+            sleep(14); // Avoid hitting the API rate limit
         }
 
         $this->info('RSI data fetched and stored (including next_url) successfully.');

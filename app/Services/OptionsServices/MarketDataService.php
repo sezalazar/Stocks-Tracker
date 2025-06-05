@@ -12,7 +12,7 @@ class MarketDataService
 {
     public function __construct(
         protected MarketDataParser $parser,
-        protected StrategyService $strategyService
+        protected StrategyService $strategyService,
     ) {
     }
 

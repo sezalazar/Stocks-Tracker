@@ -2,7 +2,12 @@
 
 return [
     'merv' => [
+        'ALUA',
+        'BYMA',
         'COME',
+        'EDN',
+        'GGAL',
+        'METR',
         'PAMP',
         'YPFD'
     ],
@@ -159,5 +164,8 @@ return [
         'XCH',
         'XMR',
         'XRP'
-    ]
+    ],
+    'bonds' => [
+        'BPOD7',
+    ],
 ];

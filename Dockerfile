@@ -16,7 +16,10 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo_pgsql mbstring zip exif pcntl \
     # Install and enable Xdebug for debugging
     && pecl install xdebug \
-    && docker-php-ext-enable xdebug
+    && docker-php-ext-enable xdebug \
+    # Install Redis Extension
+    && pecl install redis \
+    && docker-php-ext-enable redis
 
 RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini
 

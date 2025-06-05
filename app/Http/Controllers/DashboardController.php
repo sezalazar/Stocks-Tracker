@@ -62,6 +62,14 @@ class DashboardController extends Controller
             'fearAndGreed' => $this->fearGreedIndexService->fetch(),
         ];
 
+        $bondsTickers = config('tickers.bonds', []);
+        $bondsList = [];
+        foreach ($bondsTickers as $ticker) {
+            $bondsList[] = [
+                'symbol'        => $ticker,
+            ];
+        }
+
         $optionsSessionData = session('optionsData', []);
         $underlying  = $optionsSessionData['underlying']  ?? null;
         $options     = $optionsSessionData['options']     ?? [];
@@ -71,6 +79,7 @@ class DashboardController extends Controller
             'cryptoList' => $cryptoList,
             'stocksList' => $stocksList,
             'marketData' => $marketData,
+            'bondsList'   => $bondsList,
             'underlying'   => $underlying,
             'options'      => $options,
             'strategies'   => $strategies,
