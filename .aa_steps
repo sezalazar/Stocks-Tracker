@@ -1,7 +1,29 @@
--- Stand up app
-	docker-compose up -d
-    npm run dev
-    http://localhost:8000/login
+/**************************** */
+/** STAND UP APP              */
+/*************************** */
+	
+    Terminal 1:
+        docker-compose up -d
+        npm run dev
+    Terminal 2:
+        docker-compose exec laravel-vue-stocks bash
+        php artisan matriz:listen-book
+
+    Terminal X (Set reverb server in docker-compose.yml):
+        docker-compose exec laravel-vue-stocks bash
+        php artisan reverb:start --debug --host="0.0.0.0" --port=8080 
+
+    Terminal X (Implemented ShouldBroadcastNow so no need to run this command):
+        docker-compose exec laravel-vue-stocks bash
+        php artisan queue:work
+
+
+        
+
+
+    Browser:
+        http://localhost:8000/login
+    
 
 -- Rebuild Docker Containers:
 	docker-compose up -d --build
@@ -12,16 +34,35 @@ docker-compose down
 	docker-compose down
 
 
--- Execute commands:
+/*************************** */
+/** COMMANDS                 */
+/*************************** */
 docker-compose exec laravel-vue-stocks bash
 	php artisan balanceSheet:fetch
 	php artisan companyData:fetch
 	php artisan macd:fetch
 	php artisan rsi:fetch
 	php artisan stockprices:fetch
+    php artisan matriz:listen-book
 
     php artisan migrate
     php artisan migrate:rollback --path=database/migrations/2024_12_11_175526_create_financial_statements_table.php
+    composer require ...
+    php artisan reverb:start
 
--- Logs:
+
+/*************************** */
+/** LOGS                     */
+/*************************** */
 	docker-compose logs laravel-vue-stocks
+
+
+    Ver archivo de log:
+    docker-compose exec laravel-vue-stocks bash
+    cd /var/www/html/storage/logs
+    cat laravel.log
+
+
+    Reverb-server:
+    docker-compose logs -f reverb-server
+

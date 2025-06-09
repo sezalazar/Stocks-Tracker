@@ -1,6 +1,4 @@
 <?php
-// app/Services/FetchMervalStockDataService.php
-
 namespace App\Services;
 
 use App\Services\MervalServices\Matriz\MatrizAuthService;

@@ -238,12 +238,7 @@ class ListenMatrizBook extends Command
             ]);
             $this->info('Cliente WebSocket instanciado y conectado.');
 
-            // ENVIAR MENSAJE DE SUSCRIPCIÓN
             if (!empty($topicsToSubscribe)) {
-                // La aplicación real parece enviar múltiples mensajes de suscripción si la lista es muy larga,
-                // o quizás los agrupa. Por ahora, intentaremos enviar todos los tópicos en un solo mensaje.
-                // Si son demasiados (más de 1000 como antes), podría ser necesario dividirlos.
-                // Vamos a probar con un solo mensaje primero.
 
                 $subscriptionMessageData = [
                     '_req'      => "S",
@@ -264,11 +259,11 @@ class ListenMatrizBook extends Command
             $firstMessageProcessed = false; // Para loguear el primer mensaje real
             
             // Bucle para recibir mensajes
-            while (true) {
+while (true) {
                 $this->line("Estado del cliente antes de receive(): {$client}");
                  if (str_contains((string)$client, '(closed)')) {
                     $this->error("El cliente WS se reporta como cerrado antes de intentar recibir. Saliendo.");
-                    break; 
+                    break;
                 }
                 $msg = $client->receive();
 
@@ -279,20 +274,34 @@ class ListenMatrizBook extends Command
                          break;
                     }
                     $this->info("No se recibió mensaje (timeout o conexión inactiva). Continuando escucha...");
-                    sleep(1); 
+                    sleep(1);
                     continue;
                 }
                 
                 $this->line("Mensaje recibido: {$msg}");
                 if (is_string($msg) && !empty(trim($msg))) {
-                     if (class_exists(MatrizBookUpdated::class)) {
-                        broadcast(new MatrizBookUpdated($msg))->toOthers();
-                     } else { $this->warn("La clase de evento MatrizBookUpdated no existe."); }
+                    if (class_exists(MatrizBookUpdated::class)) {
+                        $decodedData = json_decode($msg, true);
+
+                        if (is_array($decodedData)) {
+                            $this->info("Mensaje es un array. Transmitiendo " . count($decodedData) . " eventos individuales...");
+                            
+                            foreach ($decodedData as $individualUpdate) {
+                                broadcast(new MatrizBookUpdated($individualUpdate))->toOthers();
+                            }
+                        } else {
+                            $this->info("Mensaje simple. Transmitiendo como un solo evento.");
+                            broadcast(new MatrizBookUpdated($msg))->toOthers();
+                        }
+
+                    } else { 
+                        $this->warn("La clase de evento MatrizBookUpdated no existe."); 
+                    }
                 } elseif (is_array($msg) && empty($msg)) {
                     $this->warn("Mensaje recibido como array vacío. Estado del cliente: {$client}. Probablemente conexión cerrada.");
                     if (str_contains((string)$client, '(closed)')) break;
                 }
-                 usleep(100000); // 0.1 segundos de pausa
+                 usleep(100000); // 0.1 seconds
             }
 
         } catch (ConnectionException $e) {
@@ -313,12 +322,12 @@ class ListenMatrizBook extends Command
             return Command::FAILURE;
         } finally {
             if (isset($client) && $client instanceof Client && !str_contains((string)$client, '(closed)')) {
-                $this->info("Cerrando conexión WebSocket...");
+                $this->info("Closing WebSocket conexion...");
                 $client->close();
             }
         }
 
-        $this->info('--- Fin del comando matriz:listen-book ---');
+        $this->info('--- End of matriz:listen-book ---');
         return Command::SUCCESS;
     }
 }

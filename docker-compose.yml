@@ -5,6 +5,8 @@ services:
       context: .
       dockerfile: Dockerfile
     image: laravel-app
+    container_name: laravel-vue-stocks
+    entrypoint: /usr/local/bin/entrypoint.sh
     environment:
       APP_ENV: local
       APP_DEBUG: 'true'
@@ -18,16 +20,38 @@ services:
       - .:/var/www/html
       - storage_data:/var/www/html/storage
       - cache_data:/var/www/html/bootstrap/cache
-    ports:
-      - "8080:8080" # Reverb server
     networks:
       - laravel
     depends_on:
       - postgres
+      - redis
+      - reverb-server
+
+  reverb-server:
+    image: laravel-app
+    container_name: reverb-server
+    command: php artisan reverb:start --host=0.0.0.0 --port=8080 --debug
+    environment:
+      REVERB_APP_ID: ${REVERB_APP_ID}
+      REVERB_APP_KEY: ${REVERB_APP_KEY}
+      REVERB_APP_SECRET: ${REVERB_APP_SECRET}
+      REVERB_HOST: ${REVERB_HOST}
+      REVERB_PORT: ${REVERB_PORT}
+      REVERB_SCHEME: ${REVERB_SCHEME}
+    ports:
+      - "8080:8080"
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - redis
+    networks:
+      - laravel
 
   postgres:
     image: postgres:15-alpine
     restart: unless-stopped
+    container_name: stocks-postgres
     environment:
       POSTGRES_DB: laravel-vue-stocks
       POSTGRES_USER: postgres
@@ -41,6 +65,7 @@ services:
 
   webserver:
     image: nginx:latest
+    container_name: stocks-nginx
     depends_on:
       - laravel-vue-stocks
     volumes:
@@ -54,6 +79,7 @@ services:
   redis:
     image: redis:7-alpine
     restart: unless-stopped
+    container_name: stocks-redis
     command: ["redis-server", "--appendonly", "yes"]
     volumes:
       - redisdata:/data

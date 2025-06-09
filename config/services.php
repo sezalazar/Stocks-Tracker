@@ -56,7 +56,5 @@ return [
     ],
     'merval_api' => [
         'base_url' => env('MATRIZ_BASE_URL'),
-        'cookie'   => env('MATRIZ_COOKIE'),
-        ''
     ],
 ];
