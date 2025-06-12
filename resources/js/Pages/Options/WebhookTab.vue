@@ -23,7 +23,7 @@
             <td
               v-for="column in tableColumnDefinitions"
               :key="column.key"
-              :class="['whitespace-nowrap px-6 py-4 text-sm', column.class]"
+              :class="['whitespace-nowrap px-6 py-4 text-sm text-gray-900', column.class]"
             >
               {{ instrument[column.key] }}
             </td>
@@ -33,6 +33,7 @@
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, reactive, onMounted, onUnmounted, computed } from 'vue';
@@ -62,12 +63,14 @@ const instrumentsForTable = computed(() => {
 let marketDataChannel = null;
 
 const handleMarketDataUpdate = (eventData) => {
-  if (eventData && typeof eventData.data === 'string' && eventData.data.startsWith('M:')) {
+  const marketDataString = eventData.data;
+
+  if (marketDataString && typeof marketDataString === 'string' && marketDataString.startsWith('M:')) {
     if (initializationMessage.value !== 'Receiving data from the market...') {
         initializationMessage.value = 'Receiving data from the market...';
     }
 
-    const parts = eventData.data.split('|');
+    const parts = marketDataString.split('|');
     const instrumentId = parts[0].split(':')[1];
     const fieldsArray = parts.slice(1);
 
@@ -98,15 +101,15 @@ onMounted(() => {
   initializationMessage.value = 'Connecting to the channel';
   
   marketDataChannel = window.Echo.channel('market-data')
-    .listen('MatrizBookUpdated', (eventData) => {
-        console.log('[WebhookTab Listener] MatrizBookUpdated received:', eventData); // Descomentar para depurar
+    .listen('.MatrizBookUpdated', (eventData) => {
+        console.log('[WebhookTab Listener] MatrizBookUpdated received:', eventData);
         handleMarketDataUpdate(eventData);
     });
 });
 
 onUnmounted(() => {
   if (marketDataChannel) {
-    marketDataChannel.stopListening('MatrizBookUpdated');
+    marketDataChannel.stopListening('.MatrizBookUpdated');
     window.Echo.leaveChannel('market-data');
     console.log('[WebhookTab] Unmounted.');
   }
