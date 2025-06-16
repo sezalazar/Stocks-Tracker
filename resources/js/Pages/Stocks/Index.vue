@@ -7,7 +7,7 @@ import PricesTab from './Tabs/PricesTab.vue'
 import TechnicalTab from './Tabs/TechnicalTab.vue'
 import FinancialTab from './Tabs/FinancialTab.vue'
 import { Button } from '@/Components/ui/button'
-import { Card } from '@/Components/ui/card'
+import { Card, CardContent } from '@/Components/ui/card' 
 
 import type { StockData, RsiItem, MacdItem, CompanyData, FinancialStatementItem, FinancialRecord } from '@/types/stock'
 
@@ -105,7 +105,6 @@ const epsChartData = computed(() => {
     props.financialData.forEach((item) => {
         const year = new Date(item.date).getFullYear()
         if (item.eps !== null) {
-            // Convertir a número
             map[year] = Number(item.eps)
         }
     })
@@ -175,8 +174,7 @@ const selectedTab = ref<TabKey>('chart')
     <Head title="Stocks" />
     <AuthenticatedLayout>
         <div class="p-6 space-y-8 min-h-screen">
-            <!-- Header: Company Information -->
-            <div class="p-6 space-y-8 bg-linear-to-r from-blue-50 via-white to-gray-100 rounded-xl shadow-lg">
+            <div class="p-6 space-y-8 bg-linear-to-r from-[hsl(var(--primary)/0.1)] via-white to-gray-100 rounded-xl shadow-lg">
                 <div class="flex flex-col md:flex-row items-center justify-between gap-6">
                     <div class="flex items-center gap-6">
                         <div
@@ -211,12 +209,11 @@ const selectedTab = ref<TabKey>('chart')
                             </span>
                         </span>
                         <Button
-                            variant="outline"
                             as="a"
                             :href="companyData.results?.homepage_url"
                             target="_blank"
                             v-if="companyData.results?.homepage_url"
-                            class="text-base font-semibold px-6 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition duration-300"
+                            class="text-base font-semibold px-6 py-2 rounded-lg bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] hover:bg-[hsl(var(--primary-dark))] transition duration-300"
                         >
                             Visit Official Site
                         </Button>
@@ -224,57 +221,54 @@ const selectedTab = ref<TabKey>('chart')
                 </div>
             </div>
 
-            <!-- About the Company -->
-            <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+            <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-[hsl(var(--primary))]">
                 <h2 class="text-2xl font-semibold text-gray-900">About the Company</h2>
                 <p class="mt-2 text-gray-600 leading-relaxed">
                     {{ companyData.results?.description ?? 'No description available.' }}
                 </p>
             </div>
 
-            <!-- Tabs Navigation -->
-            <div>
-                <div class="flex space-x-4 border-b">
-                    <button
-                        v-for="tab in tabs"
-                        :key="tab.key"
-                        @click="selectedTab = tab.key"
-                        :class="
-                            selectedTab === tab.key
-                                ? 'border-blue-600 text-blue-600 font-semibold'
-                                : 'border-transparent text-gray-500 hover:text-gray-700'
-                        "
-                        class="px-3 py-2 border-b-2 focus:outline-hidden"
-                    >
-                        {{ tab.label }}
-                    </button>
-                </div>
-                <div class="pt-4 space-y-8">
-                    <!-- Chart Tab -->
-                    <ChartTab v-if="selectedTab === 'chart'" :chartData="chartData" />
-                    <!-- Prices Tab -->
-                    <PricesTab v-if="selectedTab === 'prices'" :prices="prices" />
-                    <!-- Technical Indicators Tab -->
-                    <TechnicalTab
-                        v-if="selectedTab === 'technical'"
-                        :chartData="chartData"
-                        :rsiChartData="rsiChartData"
-                        :macdChartData="macdChartData"
-                        :rsiData="props.rsiData"
-                        :macdData="props.macdData"
-                    />
-                    <!-- Financial Tab -->
-                    <FinancialTab
-                        v-if="selectedTab === 'financial'"
-                        :financials="financials"
-                        :distinctDates="distinctDates"
-                        :metrics="metrics"
-                        :financialDataByDate="financials.reduce((acc, curr) => ({ ...acc, [curr.date]: curr }), {})"
-                        :epsChartData="epsChartData"
-                        :incomeChartData="incomeChartData"
-                    />
-                </div>
+            <Card class="bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
+                <CardContent class="p-4 md:p-6">
+                    <div class="flex space-x-1 border-b border-[hsl(var(--border))]">
+                        <button
+                            v-for="tab in tabs"
+                            :key="tab.key"
+                            @click="selectedTab = tab.key"
+                            :class="[
+                                'asset-tab-button relative px-4 py-3 text-sm font-medium transition-colors duration-200 focus:outline-none',
+                                selectedTab === tab.key 
+                                    ? 'text-[hsl(var(--primary))]' 
+                                    : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
+                            ]"
+                            :data-state="selectedTab === tab.key ? 'active' : 'inactive'"
+                        >
+                            {{ tab.label }}
+                        </button>
+                    </div>
+                    <div class="pt-6 space-y-8">
+                        <ChartTab v-if="selectedTab === 'chart'" :chartData="chartData" />
+                        <PricesTab v-if="selectedTab === 'prices'" :prices="prices" />
+                        <TechnicalTab
+                            v-if="selectedTab === 'technical'"
+                            :chartData="chartData"
+                            :rsiChartData="rsiChartData"
+                            :macdChartData="macdChartData"
+                            :rsiData="props.rsiData"
+                            :macdData="props.macdData"
+                        />
+                        <FinancialTab
+                            v-if="selectedTab === 'financial'"
+                            :financials="financials"
+                            :distinctDates="distinctDates"
+                            :metrics="metrics"
+                            :financialDataByDate="financials.reduce((acc, curr) => ({ ...acc, [curr.date]: curr }), {})"
+                            :epsChartData="epsChartData"
+                            :incomeChartData="incomeChartData"
+                        />
+                    </div>
+                </CardContent>
+            </Card>
             </div>
-        </div>
     </AuthenticatedLayout>
 </template>

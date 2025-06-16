@@ -42,7 +42,7 @@ export function getColumns(): ColumnDef<StockOrCryptoItem>[] {
           {
             variant: 'ghost',
             onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-            class: 'text-left'
+            class: 'text-left p-0 hover:bg-transparent ' + (column.getIsSorted() ? 'text-[hsl(var(--primary))]' : '')
           },
           () => [
             'Ticker',
@@ -51,7 +51,7 @@ export function getColumns(): ColumnDef<StockOrCryptoItem>[] {
         ),
       enableSorting: true,
       enableColumnFilter: true,
-      cell: ({ row }) => row.original.symbol,
+      cell: ({ row }) => h('div', { class: 'font-semibold' }, row.original.symbol),
     },
     {
       accessorKey: 'price',
@@ -70,7 +70,7 @@ export function getColumns(): ColumnDef<StockOrCryptoItem>[] {
           {
             variant: 'ghost',
             onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-            class: 'text-right'
+            class: 'text-right w-full p-0 hover:bg-transparent ' + (column.getIsSorted() ? 'text-[hsl(var(--primary))]' : '')
           },
           () => [
             '% Change',
@@ -91,7 +91,7 @@ export function getColumns(): ColumnDef<StockOrCryptoItem>[] {
           {
             variant: 'ghost',
             onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-            class: 'text-right'
+            class: 'text-right w-full p-0 hover:bg-transparent ' + (column.getIsSorted() ? 'text-[hsl(var(--primary))]' : '')
           },
           () => [
             'RSI',
@@ -112,7 +112,7 @@ export function getColumns(): ColumnDef<StockOrCryptoItem>[] {
           {
             variant: 'ghost',
             onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-            class: 'text-right'
+            class: 'text-right w-full p-0 hover:bg-transparent ' + (column.getIsSorted() ? 'text-[hsl(var(--primary))]' : '')
           },
           () => [
             'MACD',

@@ -11,6 +11,7 @@
     --popover: 0 0% 14%;
     --popover-foreground: 210 17% 97%;
     --primary: 44.9 97.1% 56.3%;
+    --primary-dark: 44.9 97.1% 50%;
     --primary-foreground: 0 0% 14%;
     --secondary: 180 9.8% 23.1%;
     --secondary-foreground: 210 17% 97%;
@@ -41,6 +42,9 @@
     --text-nav-default: 210 17% 93%;
     --text-nav-muted: 210 14% 84%;
     --text-nav-subtle: 215 9% 65%;
+    --brand-yellow: 44.9 97.1% 56.3%;
+    --flash-background: 55 98% 85%; 
+    --row-hover-background: 56 93% 87%; 
   }
 
   * {
@@ -225,6 +229,26 @@
 
   .ma-value {
     color: #f59e0b;
+  }
+
+  .data-table tbody td {
+    @apply transition-colors duration-500 ease-out;
+  }
+
+  .data-table .cell-flash {
+    background-color: hsl(var(--flash-background));
+  }
+
+  .asset-tab-active-indicator {
+    @apply flex items-center;
+  }
+
+  /* 2. Icono amarillo cuando la pestaña está activa */
+  .asset-tab-active-indicator[data-state='active'] svg {
+    /* usa tu variable de HSL para color amarillo */
+    color: hsl(var(--brand-yellow));
+    /* si usas @apply, sería así: */
+    /* @apply text-[hsl(var(--brand-yellow))]; */
   }
 }
 
