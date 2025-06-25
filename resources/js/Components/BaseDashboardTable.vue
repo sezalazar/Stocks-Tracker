@@ -12,6 +12,8 @@ import { Search } from 'lucide-vue-next'
 import type { StockOrCryptoItem } from '@/types/stock'
 import { getColumns } from '@/composables/useStockTable'
 
+defineEmits(['view-item'])
+
 const props = defineProps<{
   data: StockOrCryptoItem[],
   noResultsMessage?: string
@@ -104,7 +106,7 @@ function rowLinkStyle() {
         <TableBody>
           <template v-if="table.getRowModel().rows?.length">
             <template v-for="row in table.getRowModel().rows" :key="row.id">
-              <TableRow :class="rowLinkStyle()" @click="$inertia.visit(`/stocks?symbol=${row.original.symbol}`)" class="border-0">
+              <TableRow :class="rowLinkStyle()" @click="$emit('view-item', row.original.symbol)" class="border-0">
                 <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id" class="p-4 border-b border-[hsl(var(--border))]">
                   <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
                 </TableCell>

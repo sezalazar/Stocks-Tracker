@@ -22,8 +22,9 @@ class OptionsController extends Controller
         $results = $this->marketDataService->process($request->input('market_data'));
         return Inertia::render('Dashboard', [
             'underlying' => $results['underlying'] ?? null,
-            'options' => $results['options'] ?? [],
+            'options'    => $results['options'] ?? [],
             'strategies' => $results['strategies'] ?? [],
+            'tab'        => request()->get('tab', 'options'),
         ]);
     }
 }

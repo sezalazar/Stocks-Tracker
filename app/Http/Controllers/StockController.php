@@ -11,6 +11,7 @@ use App\Services\StockServices\Prices\StockDataApiService;
 use App\Services\StockServices\Prices\StockAnalysisApiService;
 use App\Services\StockDataTransformerService;
 use App\Services\StockServices\CompanyInfo\PolygonStockInfoService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Symfony\Component\HttpFoundation\Response;
@@ -65,6 +66,31 @@ class StockController extends Controller
             'financialData' => $financialData,
             'lastTwoCloses' => $lastTwoCloses,
         ], Response::HTTP_OK);
+    }
+
+    public function show(string $symbol): JsonResponse
+    {
+        try {
+            $companyData = $this->companyDataRepository->getCompanyDataFromDb($symbol);
+            $rsiData = $this->rsiRepository->getRsiData($symbol);
+            $macdData = $this->macdRepository->getMacdData($symbol);
+            $financialData = $this->financialStatementsRepository->getFinancialStatementsFromDb($symbol);
+            $data = $this->stockAnalysisService->fetchStockPricesFromDb($symbol);
+            $stockData = $this->stockDataTransformer->fromStockAnalysisToFront($data);
+            $lastTwoCloses = $this->getLastTwoCloses($stockData);
+
+            return response()->json([
+                'symbol' => $symbol,
+                'stockData' => $stockData,
+                'companyData' => $companyData,
+                'rsiData' => $rsiData,
+                'macdData' => $macdData,
+                'financialData' => $financialData,
+                'lastTwoCloses' => $lastTwoCloses,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Stock data could not be retrieved.'], 404);
+        }
     }
 
     private function getLastTwoCloses(array $stockData): array
