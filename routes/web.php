@@ -19,6 +19,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/stocks', [StockController::class, 'index'])->name('stocks.index');
 
+
+    // Stock Details
+    Route::get('/stock-data/{symbol}', [StockController::class, 'show'])->name('stock.show');
+
     //Options
     Route::post('/options/process', [OptionsController::class, 'processMarketData'])->name('options.process');
 });

@@ -1,17 +1,14 @@
 <script setup lang="ts">
 import { ref, computed, defineProps } from 'vue'
 import { Head } from '@inertiajs/vue3'
-import DashboardLayout from '@/Layouts/DashboardLayout.vue'
-import ChartTab from './Tabs/ChartTab.vue'
-import PricesTab from './Tabs/PricesTab.vue'
-import TechnicalTab from './Tabs/TechnicalTab.vue'
-import FinancialTab from './Tabs/FinancialTab.vue'
+import ChartTab from '@/Pages/Stocks/Tabs/ChartTab.vue'
+import PricesTab from '@/Pages/Stocks/Tabs/PricesTab.vue'
+import TechnicalTab from '@/Pages/Stocks/Tabs/TechnicalTab.vue'
+import FinancialTab from '@/Pages/Stocks/Tabs/FinancialTab.vue'
 import { Button } from '@/Components/ui/button'
 import { Card, CardContent } from '@/Components/ui/card' 
 
 import type { StockData, RsiItem, MacdItem, CompanyData, FinancialStatementItem, FinancialRecord } from '@/types/stock'
-
-defineOptions({ layout: DashboardLayout })
 
 const props = defineProps<{
     symbol: string
