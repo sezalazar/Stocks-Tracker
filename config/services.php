@@ -50,11 +50,12 @@ return [
         'key' => env('FEAR_AND_GREED_API_KEY'),
     ],
     'matriz_api' => [
-        'base_url'  => env('MATRIZ_API_BASE_URL', 'https://matriz.eco.xoms.com.ar'),
+        'base_url'  => env('MATRIZ_API_BASE_URL'),
         'username'  => env('MATRIZ_API_USERNAME'),
         'password'  => env('MATRIZ_API_PASSWORD'),
     ],
     'merval_api' => [
         'base_url' => env('MATRIZ_BASE_URL'),
+        'referer_path' => '/security/bm_MERV_%s_24hs',
     ],
 ];

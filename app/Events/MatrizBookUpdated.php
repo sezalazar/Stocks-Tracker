@@ -17,7 +17,7 @@ class MatrizBookUpdated implements ShouldBroadcastNow
 
     public function __construct($data)
     {
-        Log::info('MatrizBookUpdated construct', ['data' => $data]);
+        // Log::info('MatrizBookUpdated construct', ['data' => $data]);
         $this->data = $data;
     }
     public function broadcastAs()
@@ -28,7 +28,7 @@ class MatrizBookUpdated implements ShouldBroadcastNow
 
     public function broadcastOn()
     {
-        Log::info('MatrizBookUpdated event fired with channel');
+        // Log::info('MatrizBookUpdated event fired with channel');
         return [
             new Channel('market-data'),
         ];

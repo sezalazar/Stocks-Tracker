@@ -1,57 +1,59 @@
-<script setup lang="ts">
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+<script setup>
+import { Head, useForm } from '@inertiajs/vue3'
+import GuestLayout from '@/Layouts/GuestLayout.vue'
+import InputError from '@/Components/InputError.vue'
+import { Button } from '@/Components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card'
+import { Input } from '@/Components/ui/input'
+import { Label } from '@/Components/ui/label'
+import { Lock } from 'lucide-vue-next'
 
 const form = useForm({
     password: '',
-});
+})
 
 const submit = () => {
     form.post(route('password.confirm'), {
         onFinish: () => {
-            form.reset();
+            form.reset()
         },
-    });
-};
+    })
+}
 </script>
 
 <template>
     <GuestLayout>
         <Head title="Confirm Password" />
 
-        <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-            This is a secure area of the application. Please confirm your
-            password before continuing.
-        </div>
+        <Card class="mx-auto max-w-sm bg-card border-border">
+            <CardHeader>
+                <CardTitle class="text-2xl text-primary">Confirm Password</CardTitle>
+                <CardDescription class="text-muted-foreground pt-2">
+                    This is a secure area of the application. Please confirm your password before continuing.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <form @submit.prevent="submit" class="space-y-4">
+                    <div class="space-y-2">
+                        <Label for="password">Password</Label>
+                        <div class="relative">
+                            <Lock class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                            <Input
+                                id="password"
+                                type="password"
+                                class="pl-9"
+                                v-model="form.password"
+                                required
+                                autocomplete="current-password"
+                                autofocus
+                            />
+                        </div>
+                        <InputError class="mt-2" :message="form.errors.password" />
+                    </div>
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="password" value="Password" />
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
-                    autofocus
-                />
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="mt-4 flex justify-end">
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Confirm
-                </PrimaryButton>
-            </div>
-        </form>
+                    <Button type="submit" class="w-full" :disabled="form.processing">Confirm</Button>
+                </form>
+            </CardContent>
+        </Card>
     </GuestLayout>
 </template>

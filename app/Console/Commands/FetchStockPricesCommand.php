@@ -25,7 +25,7 @@ class FetchStockPricesCommand extends Command
 
     public function handle()
     {
-        Cache::forget('matriz_session_cookies');
+        Cache::forget('matriz_session_data');
         // Merval Tickers
         $mervalTickers = config('tickers.merv');
         $this->info('Processing Merval Tickers...');
