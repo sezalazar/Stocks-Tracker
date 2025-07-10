@@ -1,54 +1,119 @@
 <?php
 
-  namespace App\Http\Controllers;
+namespace App\Http\Controllers;
 
-  use App\Repositories\MacdRepository;
-  use App\Services\DashboardDataService;
-  use App\Services\MarketServices\FearGreedIndexService;
-  use App\Services\OptionsServices\MarketDataService;
-  use App\Services\StockServices\Indicators\RsiService;
-  use App\Services\StockServices\Prices\StockAnalysisApiService;
-  use App\Services\StockDataTransformerService;
-  use Inertia\Inertia;
+use Illuminate\Http\Request;
+use App\Services\DashboardDataService;
+use App\Services\MarketServices\FearGreedIndexService;
+use App\Services\BondsServices\BondService;
+use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
-  class DashboardController extends Controller
-  {
-      public function __construct(
-          private DashboardDataService $dashboardDataService,
-          private FearGreedIndexService $fearGreedIndexService
-      ) {}
+class DashboardController extends Controller
+{
+    public function __construct(
+        private DashboardDataService $dashboardDataService,
+        private FearGreedIndexService $fearGreedIndexService,
+        private BondService $bondService
+    ) {}
 
-      public function index()
-      {
-          $dashboardLists = $this->dashboardDataService->getDashboardLists();
+    public function index(Request $request, $symbol = null)
+    {
+        $dashboardLists = $this->dashboardDataService->getDashboardLists();
 
-          $marketData = [
-              'fearAndGreed' => $this->fearGreedIndexService->fetch(),
-          ];
+        $marketData = [
+            'fearAndGreed' => $this->fearGreedIndexService->fetch(),
+        ];
 
-          $bondsTickers = config('tickers.bonds', []);
-          $bondsList = [];
-          foreach ($bondsTickers as $ticker) {
-              $bondsList[] = [
-                  'symbol'        => $ticker,
-              ];
-          }
+        $bondsTickers = config('tickers.bonds', []);
+        $bondsList = [];
+        foreach ($bondsTickers as $ticker) {
+            $bondData = $this->bondService->getSecurityData($ticker);
+            if ($bondData) {
+                $bondsList[] = $bondData;
+            }
+        }
 
-          $optionsSessionData = session('optionsData', []);
-          $underlying  = $optionsSessionData['underlying']  ?? null;
-          $options     = $optionsSessionData['options']     ?? [];
-          $strategies  = $optionsSessionData['strategies']  ?? [];
 
-          return Inertia::render('Dashboard', [
-              'stocksList'     => $dashboardLists['stocksList'],
-              'cryptoList'     => $dashboardLists['cryptoList'],
-              'dashboardLists' => $dashboardLists,
-              'marketData'     => $marketData,
-              'bondsList'      => $bondsList,
-              'underlying'     => $underlying,
-              'options'        => $options,
-              'strategies'     => $strategies,
-              'tab'            => request()->get('tab', 'crypto'),
-          ]);
-      }
-  }
+        $mervalTickers = config('tickers.merv', []);
+        $mervalList = [];
+        foreach ($mervalTickers as $ticker) {
+            $latestData = DB::table('stock_prices')
+                ->where('symbol', $ticker)
+                ->orderBy('date', 'desc')
+                ->limit(8)
+                ->get()
+                ->reverse()
+                ->values();
+
+            if ($latestData->count() < 2) {
+                continue;
+            }
+
+            $latestRecord = $latestData->last();
+            $previousRecord = $latestData->get($latestData->count() - 2);
+
+            $price = $latestRecord->close;
+            $change = $price - $previousRecord->close;
+            $changePercent = ($previousRecord->close > 0) ? ($change / $previousRecord->close) * 100 : 0;
+
+            $mervalList[] = [
+                'symbol' => $ticker,
+                'name' => "Acción {$ticker}",
+                'price' => (float) $price,
+                'change' => (float) $change,
+                'changePercent' => (float) $changePercent,
+                'volume' => $this->formatVolume($latestRecord->volume),
+                'sector' => 'stocks',
+                'chartData' => $latestData->slice(-7)->pluck('close')->map(fn($price) => (float) $price)->all(),
+            ];
+
+        }
+
+        $optionsSessionData = session('optionsData', []);
+        $underlying  = $optionsSessionData['underlying']  ?? null;
+        $options     = $optionsSessionData['options']     ?? [];
+        $strategies  = $optionsSessionData['strategies']  ?? [];
+
+        $activeStock = null;
+        if ($symbol) {
+            $activeStock = collect($dashboardLists['stocksList'])->firstWhere('symbol', $symbol);
+        }
+        $activeTab = $request->query('tab');
+
+        return Inertia::render('Dashboard', [
+            'stocksList'     => $dashboardLists['stocksList'],
+            'cryptoList'     => $dashboardLists['cryptoList'],
+            'dashboardLists' => $dashboardLists,
+            'marketData'     => $marketData,
+            'bondsList'      => $bondsList,
+            'mervalList'     => $mervalList,
+            'underlying'     => $underlying,
+            'options'        => $options,
+            'strategies'     => $strategies,
+            'activeTab'      => $activeTab,
+            'activeStock'    => $activeStock,
+        ]);
+    }
+
+    public function showCryptosTab(){
+        return Inertia::render('DashboardTabs/CryptosTab');
+    }
+
+    public function showStocksTab(){
+        return Inertia::render('DashboardTabs/StocksTab');
+    }
+
+    private function formatVolume($volume): string
+    {
+        if (!$volume) return 'N/A';
+        
+        if ($volume > 1000000) {
+            return round($volume / 1000000, 1) . 'M';
+        }
+        if ($volume > 1000) {
+            return round($volume / 1000, 1) . 'K';
+        }
+        return (string) round($volume);
+    }
+}

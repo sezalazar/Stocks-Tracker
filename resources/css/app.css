@@ -42,9 +42,9 @@
     --text-nav-default: 210 17% 93%;
     --text-nav-muted: 210 14% 84%;
     --text-nav-subtle: 215 9% 65%;
-    --brand-yellow: 44.9 97.1% 56.3%;
     --flash-background: 55 98% 85%; 
     --row-hover-background: 56 93% 87%; 
+    --success: 140 60% 45%;
   }
 
   * {
@@ -243,13 +243,57 @@
     @apply flex items-center;
   }
 
-  /* 2. Icono amarillo cuando la pestaña está activa */
   .asset-tab-active-indicator[data-state='active'] svg {
-    /* usa tu variable de HSL para color amarillo */
     color: hsl(var(--brand-yellow));
-    /* si usas @apply, sería así: */
-    /* @apply text-[hsl(var(--brand-yellow))]; */
   }
+
+  .form-subtle-link {
+    @apply ml-auto inline-block text-sm text-muted-foreground underline hover:text-primary transition-colors;
+  }
+  
+  .form-footer-prompt {
+    @apply mt-4 text-center text-sm;
+  }
+  .form-footer-prompt .prompt-text {
+    @apply text-[hsl(var(--text-nav-muted))];
+  }
+  .form-footer-prompt .prompt-link {
+    @apply ml-1 font-semibold text-primary underline-offset-4 hover:underline;
+  }
+    .fgi-card {
+    @apply bg-card border border-border rounded-2xl shadow-md p-6 flex items-center space-x-8 text-card-foreground;
+  }
+
+  .fgi-list {
+    @apply space-y-2 text-sm;
+  }
+  .fgi-list-item {
+    @apply text-muted-foreground;
+  }
+  .fgi-list-item-value {
+    @apply font-semibold text-foreground;
+  }
+
+  .fgi-gauge-value {
+    @apply text-3xl font-bold text-foreground;
+  }
+  .fgi-gauge-text {
+    @apply text-sm text-muted-foreground;
+  }
+
+  .fgi-gauge-tick-label {
+    @apply text-[8px] fill-[hsl(var(--muted-foreground))];
+  }
+  .fgi-gauge-segment-label {
+    @apply text-[9px] font-medium fill-[hsl(var(--muted-foreground))];
+  }
+  .fgi-gauge-needle {
+    @apply stroke-[hsl(var(--foreground))];
+  }
+  .fgi-gauge-needle-center {
+    @apply fill-[hsl(var(--foreground))];
+  }
+
 }
 
 @keyframes fadeIn {

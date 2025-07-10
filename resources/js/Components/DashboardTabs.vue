@@ -1,10 +1,10 @@
-<script setup lang="ts">
+<script setup>
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/Components/ui/tabs'
 import { BitcoinIcon, LineChartIcon, BanknoteIcon, FlagIcon, PuzzleIcon, WebhookIcon } from 'lucide-vue-next'
 
 const emit = defineEmits(['update:modelValue'])
 
-function onTabChange(value: string | number) {
+function onTabChange(value) {
     emit('update:modelValue', value)
 }
 </script>
@@ -24,13 +24,13 @@ function onTabChange(value: string | number) {
             <TabsTrigger value="merval" class="asset-tab-active-indicator relative flex-1 rounded-none px-2 py-3 text-[hsl(var(--secondary-foreground))] shadow-none hover:bg-[hsl(var(--nav-border))] focus-visible:ring-0 data-[state=active]:bg-transparent data-[state=active]:text-[hsl(var(--secondary-foreground))] data-[state=active]:shadow-none md:px-4">
                 <FlagIcon class="mb-0.5 mr-1 h-4 w-4 md:mr-2" />Merval
             </TabsTrigger>
-                  <TabsTrigger value="options" class="asset-tab-active-indicator relative flex-1 rounded-none px-2 py-3 text-[hsl(var(--secondary-foreground))] shadow-none hover:bg-[hsl(var(--nav-border))] focus-visible:ring-0 data-[state=active]:bg-transparent data-[state=active]:text-[hsl(var(--secondary-foreground))] data-[state=active]:shadow-none md:px-4">
-          <PuzzleIcon class="mb-0.5 mr-1 h-4 w-4 md:mr-2" />Options
-      </TabsTrigger>
-      <TabsTrigger value="webhook" class="asset-tab-active-indicator relative flex-1 rounded-none px-2 py-3 text-[hsl(var(--secondary-foreground))] shadow-none hover:bg-[hsl(var(--nav-border))] focus-visible:ring-0 data-[state=active]:bg-transparent data-[state=active]:text-[hsl(var(--secondary-foreground))] data-[state=active]:shadow-none md:px-4">
-          <WebhookIcon class="mb-0.5 mr-1 h-4 w-4 md:mr-2" />Webhook
-      </TabsTrigger>
-            </TabsList>
+            <TabsTrigger value="options" class="asset-tab-active-indicator relative flex-1 rounded-none px-2 py-3 text-[hsl(var(--secondary-foreground))] shadow-none hover:bg-[hsl(var(--nav-border))] focus-visible:ring-0 data-[state=active]:bg-transparent data-[state=active]:text-[hsl(var(--secondary-foreground))] data-[state=active]:shadow-none md:px-4">
+                <PuzzleIcon class="mb-0.5 mr-1 h-4 w-4 md:mr-2" />Options
+            </TabsTrigger>
+            <TabsTrigger value="webhook" class="asset-tab-active-indicator relative flex-1 rounded-none px-2 py-3 text-[hsl(var(--secondary-foreground))] shadow-none hover:bg-[hsl(var(--nav-border))] focus-visible:ring-0 data-[state=active]:bg-transparent data-[state=active]:text-[hsl(var(--secondary-foreground))] data-[state=active]:shadow-none md:px-4">
+                <WebhookIcon class="mb-0.5 mr-1 h-4 w-4 md:mr-2" />Webhook
+            </TabsTrigger>
+        </TabsList>
 
         <TabsContent value="crypto"><slot name="crypto" /></TabsContent>
         <TabsContent value="stocks"><slot name="stocks" /></TabsContent>

@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
     image: laravel-app
-    container_name: laravel-vue-stocks
+    container_name: ${APP_NAME}-app
     entrypoint: /usr/local/bin/entrypoint.sh
     environment:
       APP_ENV: local
@@ -13,9 +13,9 @@ services:
       DB_CONNECTION: pgsql
       DB_HOST: postgres
       DB_PORT: 5432
-      DB_DATABASE: laravel-vue-stocks
-      DB_USERNAME: postgres
-      DB_PASSWORD: password
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
     volumes:
       - .:/var/www/html
       - storage_data:/var/www/html/storage
@@ -26,10 +26,24 @@ services:
       - postgres
       - redis
       - reverb-server
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: laravel-app
+    command: npm run dev -- --host
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "5173:5173"
+    networks:
+      - laravel
+    depends_on:
+      - laravel-vue-stocks
 
   reverb-server:
     image: laravel-app
-    container_name: reverb-server
+    container_name: ${APP_NAME}-reverb
     command: php artisan reverb:start --host=0.0.0.0 --port=8080 --debug
     environment:
       REVERB_APP_ID: ${REVERB_APP_ID}
@@ -39,7 +53,7 @@ services:
       REVERB_PORT: ${REVERB_PORT}
       REVERB_SCHEME: ${REVERB_SCHEME}
     ports:
-      - "8080:8080"
+      - "${REVERB_FORWARD_PORT:-8080}:8080"
     working_dir: /var/www/html
     volumes:
       - .:/var/www/html
@@ -47,44 +61,57 @@ services:
       - redis
     networks:
       - laravel
-
+  matriz-listener:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: laravel-app
+    container_name: ${APP_NAME}-listener
+    restart: unless-stopped
+    command: php artisan matriz:listen-book
+    volumes:
+      - .:/var/www/html
+    networks:
+      - laravel
+    depends_on:
+      - reverb-server
+      - laravel-vue-stocks
   postgres:
     image: postgres:15-alpine
     restart: unless-stopped
-    container_name: stocks-postgres
+    container_name: ${APP_NAME}-postgres
     environment:
-      POSTGRES_DB: laravel-vue-stocks
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - dbdata:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "${DB_FORWARD_PORT:-5432}:5432"
     networks:
       - laravel
-
   webserver:
     image: nginx:latest
-    container_name: stocks-nginx
+    container_name: ${APP_NAME}-nginx
     depends_on:
       - laravel-vue-stocks
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - .:/var/www/html
     ports:
-      - "8000:80"
+      - "${APP_FORWARD_PORT:-8000}:80"
     networks:
       - laravel
 
   redis:
     image: redis:7-alpine
     restart: unless-stopped
-    container_name: stocks-redis
+    container_name: ${APP_NAME}-redis
     command: ["redis-server", "--appendonly", "yes"]
     volumes:
       - redisdata:/data
     ports:
-      - "6379:6379"
+      - "${REDIS_FORWARD_PORT:-6379}:6379"
     networks:
       - laravel
 

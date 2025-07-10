@@ -1,10 +1,12 @@
-<script setup lang="ts">
+<script setup>
+import { Head, Link, useForm } from '@inertiajs/vue3'
 import GuestLayout from '@/Layouts/GuestLayout.vue'
 import InputError from '@/Components/InputError.vue'
-import InputLabel from '@/Components/InputLabel.vue'
-import PrimaryButton from '@/Components/PrimaryButton.vue'
-import TextInput from '@/Components/TextInput.vue'
-import { Head, Link, useForm } from '@inertiajs/vue3'
+import { Button } from '@/Components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card'
+import { Input } from '@/Components/ui/input'
+import { Label } from '@/Components/ui/label'
+import { User, Mail, Lock } from 'lucide-vue-next'
 
 const form = useForm({
     name: '',
@@ -26,63 +28,88 @@ const submit = () => {
     <GuestLayout>
         <Head title="Register" />
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="name" value="Name" />
+        <Card class="mx-auto max-w-sm bg-card border-border">
+            <CardHeader>
+                <CardTitle class="text-2xl text-primary">Create an Account</CardTitle>
+                <CardDescription class="text-muted-foreground">Enter your information to get started.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <form @submit.prevent="submit" class="space-y-4">
+                    <div class="space-y-2">
+                        <Label for="name">Name</Label>
+                        <div class="relative">
+                            <User class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                            <Input
+                                id="name"
+                                type="text"
+                                class="pl-9"
+                                v-model="form.name"
+                                required
+                                autofocus
+                                autocomplete="name"
+                                placeholder="John Doe"
+                            />
+                        </div>
+                        <InputError class="mt-2" :message="form.errors.name" />
+                    </div>
 
-                <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus autocomplete="name" />
+                    <div class="space-y-2">
+                        <Label for="email">Email</Label>
+                        <div class="relative">
+                            <Mail class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                            <Input
+                                id="email"
+                                type="email"
+                                class="pl-9"
+                                v-model="form.email"
+                                required
+                                autocomplete="username"
+                                placeholder="name@example.com"
+                            />
+                        </div>
+                        <InputError class="mt-2" :message="form.errors.email" />
+                    </div>
 
-                <InputError class="mt-2" :message="form.errors.name" />
-            </div>
+                    <div class="space-y-2">
+                        <Label for="password">Password</Label>
+                        <div class="relative">
+                            <Lock class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                            <Input
+                                id="password"
+                                type="password"
+                                class="pl-9"
+                                v-model="form.password"
+                                required
+                                autocomplete="new-password"
+                            />
+                        </div>
+                        <InputError class="mt-2" :message="form.errors.password" />
+                    </div>
 
-            <div class="mt-4">
-                <InputLabel for="email" value="Email" />
+                    <div class="space-y-2">
+                        <Label for="password_confirmation">Confirm Password</Label>
+                        <div class="relative">
+                            <Lock class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                            <Input
+                                id="password_confirmation"
+                                type="password"
+                                class="pl-9"
+                                v-model="form.password_confirmation"
+                                required
+                                autocomplete="new-password"
+                            />
+                        </div>
+                        <InputError class="mt-2" :message="form.errors.password_confirmation" />
+                    </div>
 
-                <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autocomplete="username" />
+                    <Button type="submit" class="w-full" :disabled="form.processing">Register</Button>
+                </form>
+            </CardContent>
+        </Card>
 
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password_confirmation" value="Confirm Password" />
-
-                <TextInput
-                    id="password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password_confirmation"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password_confirmation" />
-            </div>
-
-            <div class="mt-4 flex items-center justify-end">
-                <Link
-                    :href="route('login')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
-                >
-                    Already registered?
-                </Link>
-
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">Register</PrimaryButton>
-            </div>
-        </form>
+        <div class="form-footer-prompt">
+            <span class="prompt-text">Already have an account?</span>
+            <Link :href="route('login')" class="prompt-link">Log in</Link>
+        </div>
     </GuestLayout>
 </template>
